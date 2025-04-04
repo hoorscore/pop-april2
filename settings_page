@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 import 'sound_settings.dart';
 import 'FAQ.dart';
 import 'userslist.dart';
 import 'PrivacyPolicyAdmins.dart';
 import 'Terms_and_Conditions_Admins_page.dart';
-
+import 'login_screen.dart'; // Make sure this path is correct
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -63,9 +64,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     Text(
                       "الإعدادات",
                       style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(width: 10),
                     Icon(Icons.settings, color: Colors.white, size: 30),
@@ -78,20 +80,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ListView(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   children: [
-                    settingsOption(context, "تعديل الحساب الشخصي"),
-                    settingsOption(context, "تغيير كلمة المرور"),
-                    divider(),
-                    // Make "الصلاحيات" bold and align it to the right
+                    // "الصلاحيات" title
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Align(
-                        alignment: Alignment.centerRight, // Align to the right
+                        alignment: Alignment.centerRight,
                         child: Text(
                           "الصلاحيات",
                           style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold), // Bold text
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -104,13 +104,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
 
-
               // Logout Button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add logout logic here
+                    // Navigate to LoginScreen after logout
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
@@ -124,8 +127,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       Icon(Icons.logout, color: Colors.white),
                       SizedBox(width: 8),
-                      Text("تسجيل خروج",
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                      Text(
+                        "تسجيل خروج",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -134,42 +139,40 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.amber,
-        selectedItemColor: Colors.blue, // Blue for selected item
-        unselectedItemColor: Colors.white70,
-        currentIndex: selectedIndex, // Track the selected index
-        onTap: onItemTapped,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.checklist), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
-        ],
-      ),
     );
   }
 
-  // Function to create settings option widget (with clickable arrows)
+  // Reusable settings option tile
   Widget settingsOption(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: GestureDetector(
         onTap: () {
-          // Handle navigation for interactive options
           if (title == "تعديل أصوات الخلفية") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SoundSettingsPage()),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SoundSettingsPage()),
+            );
           } else if (title == "إدارة الأسئلة الشائعة") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => FAQPage()),);
-          }else if (title == "عرض بيانات المستخدمين") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UsersListPage()),);
-          }
-          else if (title == "تعديل سياسة الخصوصية") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PrivacyPolicyAdmins()),);
-          }else if (title == "تعديل الشروط والأحكام") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => TermsAndConditionsAdminsPage()),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FAQPage()),
+            );
+          } else if (title == "عرض بيانات المستخدمين") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UsersListPage()),
+            );
+          } else if (title == "تعديل سياسة الخصوصية") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PrivacyPolicyAdmins()),
+            );
+          } else if (title == "تعديل الشروط والأحكام") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TermsAndConditionsAdminsPage()),
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Pressed: $title")),
@@ -179,24 +182,20 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Only show arrow if the title isn't "الصلاحيات"
             if (title != "الصلاحيات")
               Icon(Icons.arrow_back, color: Colors.white),
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: title == "الصلاحيات" ? FontWeight.normal : FontWeight.bold), // Make "الصلاحيات" normal weight
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: title == "الصلاحيات" ? FontWeight.normal : FontWeight.bold,
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
-  // Divider widget
-  Widget divider() {
-    return Divider(color: Colors.white, thickness: 1, height: 20);
-  }
 }
+
